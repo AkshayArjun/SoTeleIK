@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>teleop_interfaces</name>
+  <version>0.0.1</version>
+  <description>Minimal teleop_interfaces package for meta_teleop_bag_player</description>
+  <maintainer email="user@example.com">User</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
+  <buildtool_depend>rosidl_default_generators</buildtool_depend>
+  <buildtool_depend>rosidl_generator_py</buildtool_depend>
+
+  <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <exec_depend>rosidl_default_runtime</exec_depend>
+
+  <depend>action_msgs</depend>
+
+  <member_of_group>rosidl_interface_packages</member_of_group>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+    <rosidl_generator_py>
+      <depend>rosidl_default_runtime</depend>
+    </rosidl_generator_py>
+  </export>
+</package>

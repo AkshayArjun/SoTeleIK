@@ -1,0 +1,11 @@
+# JoyPad.msg
+string pad_name
+float32[] axes
+string[] button_names
+int32[] buttons
+bool[] button_states
+float64[] finger_tracking_data
+float32 left_trigger_value
+float32 left_effort_trigger_value
+float32 right_trigger_value
+float32 right_effort_trigger_value

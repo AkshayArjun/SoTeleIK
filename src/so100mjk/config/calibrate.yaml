@@ -1,0 +1,32 @@
+project: human
+calibrate:
+  head:
+    x_offset:
+      min: -0.159556
+      max: 0.47215
+    y_offset:
+      min: -0.408117
+      max: 0.109706
+    z_offset:
+      min: -0.0553128
+      max: 0.463806
+  left_wrist:
+    x_offset:
+      min: -0.5707625207000466
+      max: 0.6359387938643759
+    y_offset:
+      min: -0.3767687908665658
+      max: 0.6751847023458392
+    z_offset:
+      min: -0.7085802971858001
+      max: 0.23273145131509992
+  right_wrist:
+    x_offset:
+      min: -0.4172881942205447
+      max: 0.5605694325834557
+    y_offset:
+      min: -0.6738209151204287
+      max: 0.4289681881449524
+    z_offset:
+      min: -0.7209796744314
+      max: 0.22078749543279996

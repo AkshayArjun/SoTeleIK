@@ -1,0 +1,23 @@
+# Goal
+geometry_msgs/Pose goal_error
+int32[] jacp1
+int32[] jac
+float64 error_threshold
+
+---
+
+# Result
+float64[] joint_angles
+bool success
+float64 error1
+float64 error2
+int32 iterations
+
+---
+
+# Feedback
+int32 current_iteration
+float64 error1
+float64 error2
+geometry_msgs/Pose pose_error
+float64[] joint_angles
