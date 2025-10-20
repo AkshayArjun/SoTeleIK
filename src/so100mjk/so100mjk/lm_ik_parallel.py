@@ -234,7 +234,7 @@ class MuJoCoSimulatorNode(Node):
     
     def init_camera_renderers(self):
         """
-        Initialize camera renderers AFTER OpenGL context is ready.
+        Initialize camera renderers 
         This should be called from visualization_loop() after GLFW window is created.
         """
         try:
@@ -280,7 +280,7 @@ class MuJoCoSimulatorNode(Node):
                 Bottom row = left wrist (left half) | right wrist (right half)
         """
         if not self.cameras_ready or not self.renderers:
-            if self.frame_count == 1:  # Log once at startup
+            if self.frame_count == 1:
                 self.get_logger().warn(f"Cameras not ready. cameras_ready={self.cameras_ready}, renderers_empty={not self.renderers}")
             return
 
@@ -289,28 +289,22 @@ class MuJoCoSimulatorNode(Node):
         # --- Render each camera view ---
         for cam_name, r in self.renderers.items():
             try:
-                # Update scene with current data, using the specific camera
-                # Use data_lock to ensure data isn't being modified by sim thread
                 with self.data_lock:
                     mujoco.mjv_updateScene(
                         self.model, self.data, self.opt, None,
                         r["cam"], mujoco.mjtCatBit.mjCAT_ALL, r["scn"]
                     )
 
-                # Render scene to offscreen buffer
                 mujoco.mjr_render(r["vp"], r["scn"], r["con"])
-
-                # Read RGB and depth pixels from OpenGL framebuffer
                 mujoco.mjr_readPixels(r["rgb"], r["dep"], r["vp"], r["con"])
 
-                # Process for OpenCV
-                img_flipped = np.flipud(r["rgb"])  # Flip vertical (OpenGL origin is bottom-left)
-                img_bgr = cv2.cvtColor(img_flipped, cv2.COLOR_RGB2BGR)  # RGB -> BGR
+               
+                img_flipped = np.flipud(r["rgb"]) 
+                img_bgr = cv2.cvtColor(img_flipped, cv2.COLOR_RGB2BGR) 
 
-                img_rot = cv2.rotate(img_bgr, cv2.ROTATE_90_CLOCKWISE)  # Rotate if needed
+                img_rot = cv2.rotate(img_bgr, cv2.ROTATE_90_CLOCKWISE)  
                 images[cam_name] = img_rot
 
-                # Debug: Check pixel values (only log once)
                 if self.frame_count == 1 and cam_name == "1wrist_cam":
                     unique_vals = np.unique(r["rgb"])
                     if len(unique_vals) > 1:
@@ -329,32 +323,25 @@ class MuJoCoSimulatorNode(Node):
         img_right = images.get("1wrist_cam")
 
         if img_head is None or img_left is None or img_right is None:
-            # Not all images were rendered, wait for next frame
             return
-
-        # Get dimensions from head image
+        
         h_head, w_head, _ = img_head.shape
         if h_head == 0 or w_head == 0:
-            return # Skip if image is empty
+            return 
 
-        # Resize left and right images to half the width and same height as head
         target_w = w_head // 2
         target_h = h_head
         img_left_resized = cv2.resize(img_left, (target_w, target_h))
         img_right_resized = cv2.resize(img_right, (target_w, target_h))
 
-        # Create bottom row by horizontally stacking left and right
         bottom_row = np.hstack((img_left_resized, img_right_resized))
 
-        # Resize head image to match bottom row width
         head_width = bottom_row.shape[1]
         head_height = bottom_row.shape[0]
         img_head_resized = cv2.resize(img_head, (head_width, head_height))
 
-        # Create final image by vertically stacking head (top) and bottom row
         final_image = np.vstack((img_head_resized, bottom_row))
 
-        # Display the combined image
         cv2.imshow(self.cv_window_name, final_image)
         cv2.waitKey(1)
 
@@ -362,8 +349,6 @@ class MuJoCoSimulatorNode(Node):
         """Runs physics with parallel IK tracking."""
         self.get_logger().info("Simulation loop started")
         q_target = np.zeros(self.model.nu)
-        
-        # Wait for cameras to initialize before starting rendering calls
         startup_timeout = time.time() + 5.0  # 5 second timeout
         while not self.cameras_ready and time.time() < startup_timeout:
             time.sleep(0.1)
@@ -407,10 +392,6 @@ class MuJoCoSimulatorNode(Node):
                 pos_error = q_target - current_qpos
                 torque = kp * pos_error - kd * current_qvel
                 self.data.ctrl[:18] = torque
-
-                # --- THIS CALL HAS BEEN MOVED TO visualization_loop() ---
-                # self.cv_frame_update() 
-                # --------------------------------------------------------
 
                 mujoco.mj_step(self.model, self.data)
                 

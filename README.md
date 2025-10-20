@@ -123,6 +123,7 @@ source install/setup.bash
 
 ## Usage
 
+
 ### 1. Run Workspace Calibration (Optional but Recommended)
 
 This script helps define the reachable workspace of the simulated arms, which is used for scaling teleoperation input. Must do if you choose to use any arm other than SO_100s, or have a different bot configuration. 
