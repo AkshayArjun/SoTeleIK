@@ -98,7 +98,7 @@ assets_calib/
 
 ```bash
 # Create and initialize a ROS 2 workspace (if you don't have one)
-mkdir -p ~/so_teleik_ws/src
+mkdir -p ~/so_teleik_ws
 cd ~/so_teleik_ws
 
 git clone https://github.com/AkshayArjun/SoTeleIK.git
