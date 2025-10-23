@@ -108,7 +108,7 @@ git clone https://github.com/AkshayArjun/SoTeleIK.git
 pip install numpy PyYAML opencv-python mujoco
 
 # Ensure you have the teleop_interfaces package built in this or another sourced workspace
-ccd ~/so_teleik_ws
+cd ~/so_teleik_ws
 colcon build --packages-select teleop_intrfaces
 
 # Build the workspace
